@@ -16,21 +16,25 @@ class HomePage extends StatelessWidget {
       'name': 'McLaren Team T-Shirt',
       'price': 'Rp800.000',
       'image': 'assets/images/tshirt.jpg',
+      'description': 'Kaos resmi tim McLaren musim 2026. Bahan katun premium yang menyerap keringat dengan baik.',
     },
     {
       'name': 'McLaren Racing Cap',
       'price': 'Rp500.000',
       'image': 'assets/images/cap.jpg',
+      'description' :'Topi balap keren yang bisa bikin anda balapan menjadi pembalap yang membalap'
     },
     {
       'name': 'McLaren Team Hoodie',
       'price': 'Rp1.000.000',
       'image': 'assets/images/hoodie.jpg',
+      'description' : 'Hoodie keren warna oren terlepas nama team nya'
     },
     {
       'name': 'McLaren Racing Jacket',
       'price': 'Rp1.600.000',
       'image': 'assets/images/jacket.jpg',
+      'description' : 'Jaket balap keren, ga cocok buat daily karena panas'
     },
   ];
 
