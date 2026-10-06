@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../pages/cart_page.dart'; 
+
 // widget header untuk halaman utama pada aplikasi.
 class AppHeader extends StatelessWidget {
   const AppHeader({super.key});
@@ -47,11 +49,20 @@ class AppHeader extends StatelessWidget {
               // SizedBox untuk memberikan jarak antar icon.
               const SizedBox(width: 18),
 
-              // icon ini untuk icon keranjang belanja.
-              const Icon(
-                Icons.shopping_bag_outlined,
-                color: Colors.white,
-                size: 24,
+              // BUNGKUS ICON INI AGAR BISA DI-KLIK
+              GestureDetector(
+                onTap: () {
+                  // Navigasi ke Halaman Keranjang
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CartPage()),
+                  );
+                },
+                child: const Icon(
+                  Icons.shopping_bag_outlined,
+                  color: Colors.white,
+                  size: 24,
+                ),
               ),
             ],
           ),
