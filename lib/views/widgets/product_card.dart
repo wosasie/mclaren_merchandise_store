@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-// IMPORT HALAMAN DETAIL
-import '../../product_detail_page.dart'; // Sesuaikan path jika folder Anda berbeda
+import 'package:mclaren_merchandise_store/models/product.dart';
+import 'package:mclaren_merchandise_store/product_detail_page.dart';
 
 // widget untuk menampilkan satu card merchandise.
 class ProductCard extends StatelessWidget {

@@ -1,41 +1,42 @@
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'views/pages/home_page.dart';
+import 'providers/cart_provider.dart';
 
-void main() {
-  runApp(const McLarenStoreApp());
-}
-
-// widget utama aplikasi mcLaren merchandise store.
+// Widget utama aplikasi McLaren Merchandise Store.
 class McLarenStoreApp extends StatelessWidget {
   const McLarenStoreApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // materialApp berfungsi sebagai wrapper utama aplikasi.
-    return MaterialApp(
-      title: 'McLaren Merchandise Store',
-
-      // menghilangkan label DEBUG pada aplikasi.
-      debugShowCheckedModeBanner: false,
-
-      // ThemeData berfungsi untuk mengatur tema aplikasi.
-      theme: ThemeData(
-        // memakai font Space Grotesk untuk seluruh aplikasi.
-        fontFamily: 'Space Grotesk',
-
-        // mengatur warna utama aplikasi.
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
+    // MultiProvider menyediakan state untuk seluruh halaman.
+    return MultiProvider(
+      providers: [
+        // Membuat dan menyediakan pengelola keranjang.
+        ChangeNotifierProvider(
+          create: (_) => CartProvider(),
         ),
-
-        // mengatur warna background halaman.
-        scaffoldBackgroundColor: Colors.white,
+      ],
+      // MaterialApp menjadi wrapper utama aplikasi.
+      child: MaterialApp(
+        title: 'McLaren Merchandise Store',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'Space Grotesk',
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.orange,
+          ),
+          scaffoldBackgroundColor: Colors.white,
+        ),
+        // Menampilkan homepage sebagai halaman awal.
+        home: const HomePage(),
       ),
-
-      // menampilkan HomePage sebagai halaman utama.
-      home: const HomePage(),
     );
   }
 }
 
-
+void main() {
+  runApp(const McLarenStoreApp());
+}

@@ -1,47 +1,34 @@
+
 import 'package:flutter/material.dart';
-import 'cart_data.dart'; // Import keranjang global kita
+import 'package:provider/provider.dart';
+import 'models/product.dart';
+import 'providers/cart_provider.dart';
 
-// --- MODEL DATA PRODUK ---
-class Product {
-  final String name;
-  final String imagePath;
-  final String price;
-  final String description;
-
-  Product({required this.name, required this.imagePath, required this.price, required this.description});
-}
-
-// --- HALAMAN DETAIL (Sekarang menjadi StatefulWidget) ---
+// Halaman detail produk.
 class ProductDetailPage extends StatefulWidget {
   final Product product;
 
-  const ProductDetailPage({super.key, required this.product});
+  const ProductDetailPage({
+    super.key,
+    required this.product,
+  });
 
   @override
-  State<ProductDetailPage> createState() => _ProductDetailPageState();
+  State<ProductDetailPage> createState() =>
+      _ProductDetailPageState();
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  
-  // Fungsi untuk menambah barang ke keranjang
+  // Menambahkan produk ke keranjang menggunakan Provider.
   void _addToCart() {
-    setState(() {
-      // Cek apakah barang sudah ada di keranjang
-      int existingIndex = globalCart.indexWhere((item) => item.product.name == widget.product.name);
+    context.read<CartProvider>().addToCart(widget.product);
 
-      if (existingIndex != -1) {
-        // Jika sudah ada, tambah kuantitasnya saja
-        globalCart[existingIndex].quantity++;
-      } else {
-        // Jika belum ada, masukkan sebagai barang baru
-        globalCart.add(CartItem(product: widget.product, quantity: 1));
-      }
-    });
-
-    // Munculkan notifikasi sukses
+    // Menampilkan notifikasi setelah produk ditambahkan.
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${widget.product.name} dimasukkan ke keranjang!'),
+        content: Text(
+          '${widget.product.name} dimasukkan ke keranjang!',
+        ),
         backgroundColor: Colors.green,
         duration: const Duration(seconds: 1),
       ),
@@ -50,57 +37,140 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Scaffold sebagai struktur utama halaman detail.
     return Scaffold(
+      // AppBar sebagai header halaman detail.
       appBar: AppBar(
-        title: const Text("Detail Produk", style: TextStyle(fontFamily: 'SpaceGrotesk', fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Detail Produk',
+          style: TextStyle(
+            fontFamily: 'Space Grotesk',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.orange,
         foregroundColor: Colors.white,
       ),
+
+      // Padding untuk memberikan jarak pada konten.
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+
+        // Row untuk menyusun gambar dan deskripsi secara horizontal.
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- KIRI: GAMBAR ---
+            // Expanded untuk area gambar produk.
             Expanded(
               flex: 1,
+
+              // Hero untuk animasi perpindahan gambar.
               child: Hero(
-                tag: widget.product.imagePath, // Perhatikan penggunaan widget.product
+                tag: widget.product.imagePath,
+
+                // ClipRRect untuk membuat sudut gambar membulat.
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(widget.product.imagePath, fit: BoxFit.cover),
+
+                  // Image.asset untuk menampilkan gambar produk.
+                  child: Image.asset(
+                    widget.product.imagePath,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
+
+            // SizedBox untuk jarak antara gambar dan deskripsi.
             const SizedBox(width: 24),
 
-            // --- KANAN: DESKRIPSI ---
+            // Expanded untuk area informasi produk.
             Expanded(
               flex: 1,
+
+              // SingleChildScrollView agar deskripsi dapat di-scroll.
               child: SingleChildScrollView(
+                // Column untuk menyusun informasi secara vertikal.
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.product.name, style: const TextStyle(fontFamily: 'SpaceGrotesk', fontSize: 28, fontWeight: FontWeight.bold)),
+                    // Text untuk menampilkan nama produk.
+                    Text(
+                      widget.product.name,
+                      style: const TextStyle(
+                        fontFamily: 'Space Grotesk',
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
                     const SizedBox(height: 8),
-                    Text(widget.product.price, style: const TextStyle(fontFamily: 'SpaceGrotesk', fontSize: 22, color: Colors.deepOrange, fontWeight: FontWeight.w600)),
+
+                    // Text untuk menampilkan harga produk.
+                    Text(
+                      widget.product.price,
+                      style: const TextStyle(
+                        fontFamily: 'Space Grotesk',
+                        fontSize: 22,
+                        color: Colors.deepOrange,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+
                     const SizedBox(height: 24),
-                    const Text("Deskripsi", style: TextStyle(fontFamily: 'SpaceGrotesk', fontSize: 18, fontWeight: FontWeight.bold)),
+
+                    // Judul bagian deskripsi.
+                    const Text(
+                      'Deskripsi',
+                      style: TextStyle(
+                        fontFamily: 'Space Grotesk',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
                     const SizedBox(height: 8),
-                    Text(widget.product.description, style: const TextStyle(fontFamily: 'SpaceGrotesk', fontSize: 16, height: 1.5)),
+
+                    // Text untuk menampilkan deskripsi produk.
+                    Text(
+                      widget.product.description,
+                      style: const TextStyle(
+                        fontFamily: 'Space Grotesk',
+                        fontSize: 16,
+                        height: 1.5,
+                      ),
+                    ),
+
                     const SizedBox(height: 32),
-                    
-                    // Tombol Tambah ke Keranjang
+
+                    // SizedBox untuk mengatur ukuran tombol.
                     SizedBox(
                       width: double.infinity,
                       height: 50,
+
+                      // ElevatedButton untuk menambahkan produk ke keranjang.
                       child: ElevatedButton(
+                        // Mengatur tampilan tombol.
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
-                        onPressed: _addToCart, // Panggil fungsi di atas saat diklik
-                        child: const Text("Tambah ke Keranjang", style: TextStyle(fontFamily: 'SpaceGrotesk', color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+
+                        // Menjalankan fungsi ketika tombol ditekan.
+                        onPressed: _addToCart,
+
+                        // Text sebagai label tombol.
+                        child: const Text(
+                          'Tambah ke Keranjang',
+                          style: TextStyle(
+                            fontFamily: 'Space Grotesk',
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ],
